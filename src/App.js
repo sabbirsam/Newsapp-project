@@ -1,39 +1,52 @@
+
 import './App.css';
+import React, {useState} from 'react';
+import { ReactDom } from "react-dom/client";
+import {
+  BrowserRouter,
+  Routes,
+  Route
+} from "react-router-dom";
+import Navbar from './components/Navbar';
+import Texteditor from './components/Texteditor';
 
-import React, { useState } from 'react'
-import NavBar from './components/NavBar';
-import News from './components/News';
-import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import LoadingBar from 'react-top-loading-bar'
+function App() {
 
-const App = ()=> {
-  const pageSize = 5;
-  const apiKey = process.env.REACT_APP_NEWS_API
-  const [progress, setProgress] = useState(0)
+  const [mode, setMode] = useState('light');
+  
+  const toogleMode=()=>{
+    if(mode === 'light'){
+      setMode ('dark');
+      document.body.style.backgroundColor='#343A40';
+      document.body.style.color='white';
+
+      const c = document.getElementById('exampleFormControlTextarea1');
+      c.style.backgroundColor="black";
+      c.style.color="white";
+    }else{
+      setMode ('light');
+      document.body.style.backgroundColor='white';
+      document.body.style.color='black';
+      
+      const c = document.getElementById('exampleFormControlTextarea1');
+      c.style.backgroundColor="white";
+      c.style.color="black";
+
+    }
+  }
+  
+  return (
+  <>
+    <BrowserRouter>
+      <Navbar title="Sabbir Ahmed" home="HOME" mode={mode} toogleMode={toogleMode} name="sam" blog="Blog" About="About"/>
+        <Routes>
+          <Route path="/" element={<Texteditor />} />
+        </Routes>
+    </BrowserRouter>
+  </>
  
-    return (
-      <div>
-        <Router>
-        <NavBar/> 
-        <LoadingBar
-        height={3}
-        color='#f11946'
-        progress={progress} 
-      />
-        <Switch>
-          <Route exact path="/"><News setProgress={setProgress} apiKey={apiKey} key="general" pageSize={pageSize} country="in" category="general"/></Route> 
-          <Route exact path="/business"><News setProgress={setProgress} apiKey={apiKey} key="business" pageSize={pageSize} country="in" category="business"/></Route> 
-          <Route exact path="/entertainment"><News setProgress={setProgress} apiKey={apiKey} key="entertainment" pageSize={pageSize} country="in" category="entertainment"/></Route> 
-          <Route exact path="/general"><News setProgress={setProgress} apiKey={apiKey} key="general" pageSize={pageSize} country="in" category="general"/></Route> 
-          <Route exact path="/health"><News setProgress={setProgress} apiKey={apiKey} key="health" pageSize={pageSize} country="in" category="health"/></Route> 
-          <Route exact path="/science"><News setProgress={setProgress} apiKey={apiKey} key="science" pageSize={pageSize} country="in" category="science"/></Route> 
-          <Route exact path="/sports"><News setProgress={setProgress} apiKey={apiKey} key="sports" pageSize={pageSize} country="in" category="sports"/></Route> 
-          <Route exact path="/technology"><News setProgress={setProgress} apiKey={apiKey} key="technology" pageSize={pageSize} country="in" category="technology"/></Route> 
-        </Switch>
-        </Router>
-      </div>
-    )
- 
+
+  );
 }
 
 export default App;
